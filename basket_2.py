@@ -43,12 +43,13 @@ all_players = {}
 num_player = 0  
 
 num_player_print = 0
-for char in all_char[23:]:
+for char in all_char:
     url = f'https://www.basketball-reference.com/players/{char}/'
     #print(char)
-
+    #name_file = f"all_players{char}"
     response_r = s.get(url)
     if response_r.status_code == 200:
+
         soup = spp(response_r.content,'html.parser')
  
         count_players = soup.find('div',{'id':'all_players'}).find('h2').text.replace(' Players','')
@@ -74,9 +75,11 @@ for char in all_char[23:]:
     #print(count_players)
 
 for player in all_players.values():
+
     url_player = player['Link']
     response_r = s.get(url_player)
     soup = spp(response_r.content,'html.parser')
+    print(url_player)
     
     ######
     #### Start Info Player
@@ -171,7 +174,8 @@ df = pandas.DataFrame.from_dict(all_players , orient="index",
         columns=["Name",'Link','Position','Born_Date','Born_date','Born_place',
         'NBA_Debut','College','High School','Height'])
 
-df.to_excel("all_players.xlsx",index=False)
+df.to_excel("file.xlsx",index=False)
+#df.to_excel(name_file+".xlsx",index=False)
 
 
 #for player in all_players.values():    

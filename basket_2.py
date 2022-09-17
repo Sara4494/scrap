@@ -75,12 +75,14 @@ for char in all_char:
     #print(count_players)
 
 for player in all_players.values():
-
-    url_player = player['Link']
-    response_r = s.get(url_player)
-    soup = spp(response_r.content,'html.parser')
-    print(url_player)
-    
+    try:
+        url_player = player['Link']
+        response_r = s.get(url_player)
+        if response_r.status_code == 200:
+            soup = spp(response_r.content,'html.parser')
+        print(url_player)
+    except:
+        print('no')
     ######
     #### Start Info Player
     ######

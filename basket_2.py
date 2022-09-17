@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as spp
 import requests
 import pandas
-#import xlsxwriter
+
 
 # Create a workbook and add a worksheet.
 
@@ -50,7 +50,7 @@ for char in all_char[23:]:
     response_r = s.get(url)
     if response_r.status_code == 200:
         soup = spp(response_r.content,'html.parser')
-
+ 
         count_players = soup.find('div',{'id':'all_players'}).find('h2').text.replace(' Players','')
         try :
             tag_players = soup.find('table',{'id':'players'}).find_all('th',{'data-stat':'player'})[1:]

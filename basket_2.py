@@ -19,8 +19,9 @@ s.headers.update(headersss)
 #list_char = ['a','b','c','d','e','f','z']
 
 response_r = s.get("https://www.basketball-reference.com/players")
+if response_r.status_code == 200:
 
-soup = spp(response_r.content,'html.parser')
+    soup = spp(response_r.content,'html.parser')
 
 #print(soup)
 
@@ -32,9 +33,10 @@ for char in list_mn_el_soup:
     try:
         char_n = char.find('a').text.lower()
         all_char.append(char_n)
+        
     except:                                                                                   
         pass
-
+ 
 print(all_char)
 print(len(all_char))
 
@@ -43,14 +45,20 @@ all_players = {}
 num_player = 0  
 
 num_player_print = 0
-for char in all_char[23:]:
-    url = f'https://www.basketball-reference.com/players/{char}/'
-    #print(char)
+for char in all_char:
+    try:
+      url = f'https://www.basketball-reference.com/players/{char}/'
+      response_r = s.get(url)
+      
 
-    response_r = s.get(url)
-    if response_r.status_code == 200:
-        soup = spp(response_r.content,'html.parser')
+      
+      soup = spp(response_r.content,'html.parser')
+    
+    except:
 
+        pass
+    
+ 
         count_players = soup.find('div',{'id':'all_players'}).find('h2').text.replace(' Players','')
         try :
             tag_players = soup.find('table',{'id':'players'}).find_all('th',{'data-stat':'player'})[1:]
@@ -61,6 +69,7 @@ for char in all_char[23:]:
             for tag in tag_players:
                 num_player +=1
                 name_of_player = tag.find('a').text
+                
                 link_of_player = tag.find('a')['href']
                 
                 link_of_player_kamel = base_url + link_of_player
@@ -68,6 +77,7 @@ for char in all_char[23:]:
                     'Name' : name_of_player,
                     'Link' : link_of_player_kamel,   
                 }
+                
         #print("Number Of Players page",char,len(tag_players))
     else:
         print("Internet Disconnected")
@@ -76,8 +86,9 @@ for char in all_char[23:]:
 for player in all_players.values():
     url_player = player['Link']
     response_r = s.get(url_player)
-    soup = spp(response_r.content,'html.parser')
-    
+    if response_r.status_code == 200:
+       soup = spp(response_r.content,'html.parser')
+       print( player['Name'])
     ######
     #### Start Info Player
     ######
@@ -94,7 +105,7 @@ for player in all_players.values():
     
     try:
         name_player = info_player.find('h1').text.strip()
-        print(name_player)
+        #print(name_player)
     except:
         name_player = "No Name"
         pass
@@ -110,7 +121,7 @@ for player in all_players.values():
         if ("Position") in p_text:
             try:
                 player["Position"] = p_text.strip().replace("Position:","").replace("Shoots:","").replace("Right","").replace("▪","").replace("Left","").strip()
-
+                
             except:
                 player["Position"] = "No Position"
         #elif ("Shoots") in p_text:
@@ -139,7 +150,7 @@ for player in all_players.values():
         elif ("College") in p_text:
 
             try:
-                player["College"] = p_text.strip().replace("College","").replace(" ","")
+                player["College"] = p_text.strip().replace("College","").replace(" ","").replace(":","")
                 #print(p_text)
             except:
                 player["College"] = "No College"
@@ -168,10 +179,10 @@ for player in all_players.values():
 print(len(all_players))
 
 df = pandas.DataFrame.from_dict(all_players , orient="index",
-        columns=["Name",'Link','Position','Born_Date','Born_date','Born_place',
-        'NBA_Debut','College','High School','Height'])
+        columns=["Name",'Link','Position','Born_Date','Born_place',
+        'NBA Debut','College','High School','Height'])
 
-df.to_excel("all_players.xlsx",index=False)
+df.to_excel("all_players.xlsx",indeX=False)
 
 
 #for player in all_players.values():    

@@ -14,7 +14,6 @@ s.headers.update(new_headersss)
 all_products = []
 
 num_page = 0
-
 for pp in range(10):
     num_page += 1
     base_url = f"https://mob4me.com/samsung/{num_page}"

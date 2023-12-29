@@ -3,15 +3,13 @@ from bs4 import BeautifulSoup as spp
 import requests
 
 
-
-#### دى عشان الموقع ما يعرفش ان دة سكريبت ويبقى فاكر انه انسان بيتصفح عادى
+ 
 headersss = {
     "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.63"}
 
-#### دة المتغير اللى بنحط جواه اللينك الاساسى للموقع
+ 
 base_url = "https://www.basketball-reference.com"
-
-#### دة عشان نفتح سيشن من الريكوست وندخل جواها ال user_agent
+ 
 s = requests.session()
 s.headers.update(headersss)
 
